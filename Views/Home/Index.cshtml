@@ -1,8 +1,189 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using System.Globalization
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var indonesianCulture = new CultureInfo("id-ID");
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Expense Dashboard</h1>
+    <p class="text-muted">Overview of your expenses</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Total Expenses</p>
+                        <h4 class="mb-0">@Model.TotalExpenses.ToString("C", indonesianCulture)</h4>
+                    </div>
+                    <div class="bg-primary bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-wallet2 text-primary fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">@Model.TotalExpenseCount transactions</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Today</p>
+                        <h4 class="mb-0">@Model.TodayExpenses.ToString("C", indonesianCulture)</h4>
+                    </div>
+                    <div class="bg-success bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-calendar-day text-success fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">@DateTime.Today.ToString("MMM dd, yyyy")</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">This Month</p>
+                        <h4 class="mb-0">@Model.ThisMonthExpenses.ToString("C", indonesianCulture)</h4>
+                    </div>
+                    <div class="bg-info bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-calendar-month text-info fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">@DateTime.Now.ToString("MMMM yyyy")</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Avg. Per Day</p>
+                        <h4 class="mb-0">
+                            @{
+                                var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                var avgPerDay = Model.ThisMonthExpenses > 0 ? Model.ThisMonthExpenses / daysInMonth : 0;
+                            }
+                            @avgPerDay.ToString("C", indonesianCulture)
+                        </h4>
+                    </div>
+                    <div class="bg-warning bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-graph-up-arrow text-warning fs-4"></i>
+                    </div>
+                </div>
+                <small class="text-muted">This month average</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <!-- Recent Expenses -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Expenses</h5>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.RecentExpenses.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Payment Method</th>
+                                    <th class="text-end">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var expense in Model.RecentExpenses)
+                                {
+                                    <tr>
+                                        <td>@expense.ExpenseDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@(expense.Description ?? "-")</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                <i class="bi bi-credit-card me-1"></i>@expense.PaymentMethod
+                                            </span>
+                                        </td>
+                                        <td class="text-end fw-semibold">@expense.Amount.ToString("C", indonesianCulture)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-receipt fs-1 d-block mb-2"></i>
+                        No expenses found
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Expenses by Payment Method -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>By Payment Method</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.ExpensesByPaymentMethod.Any())
+                {
+                    @foreach (var method in Model.ExpensesByPaymentMethod.OrderByDescending(x => x.Value))
+                    {
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">@method.Key</span>
+                                <span class="fw-semibold">@method.Value.ToString("C", indonesianCulture)</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                @{
+                                    var percentage = (double)(method.Value / Model.TotalExpenses * 100);
+                                }
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: @percentage%"></div>
+                            </div>
+                            <small class="text-muted">@percentage.ToString("F1")%</small>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-credit-card fs-1 d-block mb-2"></i>
+                        No data available
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="mb-3"><i class="bi bi-lightning me-2"></i>Quick Actions</h5>
+                <a asp-controller="Expense" asp-action="Create" asp-route-returnUrl="/Home" class="btn btn-primary me-2">
+                    <i class="bi bi-plus-lg me-1"></i>Add Expense
+                </a>
+                <a asp-controller="Expense" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-list me-1"></i>View All Expenses
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

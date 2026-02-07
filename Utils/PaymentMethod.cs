@@ -1,9 +1,9 @@
 using AccountingApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AccountingApp.Helpers
+namespace AccountingApp.Utils
 {
-    public static class PaymentMethodHelper
+    public static class PaymentMethod
     {
         public static List<SelectListItem> GetPaymentMethodOptions(string? selectedValue = null)
         {

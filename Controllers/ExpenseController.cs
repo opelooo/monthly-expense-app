@@ -1,7 +1,7 @@
-using AccountingApp.Helpers;
 using AccountingApp.Interfaces;
 using AccountingApp.Models;
 using AccountingApp.Repositories;
+using AccountingApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccountingApp.Controllers;
@@ -47,8 +47,10 @@ public class ExpenseController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult Create(string? returnUrl)
     {
+        ViewBag.ReturnUrl = returnUrl;
+        Console.WriteLine($"[DEBUG] Return URL: {returnUrl}");
         return View();
     }
 
@@ -58,21 +60,25 @@ public class ExpenseController : Controller
         decimal amount,
         DateTime expenseDate,
         string? description,
-        string paymentMethod
+        string paymentMethod,
+        string? returnUrl
     )
     {
         // Session sudah di-validate oleh middleware
         var userId = HttpContext.Session.GetString("UserId")!;
+        Console.WriteLine($"[DEBUG] Return URL: {returnUrl}");
 
         if (amount <= 0)
         {
-            SweetAlertHelper.Error(TempData, "Input Gagal", "Amount harus lebih dari 0");
+            SweetAlert.Error(TempData, "Input Gagal", "Amount harus lebih dari 0");
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         if (string.IsNullOrWhiteSpace(paymentMethod))
         {
-            SweetAlertHelper.Error(TempData, "Input Gagal", "Payment method harus diisi");
+            SweetAlert.Error(TempData, "Input Gagal", "Payment method harus diisi");
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -102,8 +108,14 @@ public class ExpenseController : Controller
         _logger.LogInformation(
             $"Expense dengan amount {amount} berhasil ditambahkan untuk user {userId}"
         );
-        SweetAlertHelper.Success(TempData, "Expense Berhasil", "Expense berhasil ditambahkan.");
-        return RedirectToAction("Index");
+        SweetAlert.Success(TempData, "Expense Berhasil", "Expense berhasil ditambahkan.");
+        // Gunakan LocalRedirect untuk URL mentah (path) agar aman dari Open Redirect Attack
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        {
+            return LocalRedirect(returnUrl);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -118,7 +130,7 @@ public class ExpenseController : Controller
         );
         if (userExpense == null)
         {
-            SweetAlertHelper.Error(
+            SweetAlert.Error(
                 TempData,
                 "Tidak Diizinkan",
                 "Anda tidak memiliki akses ke expense ini"
@@ -129,7 +141,7 @@ public class ExpenseController : Controller
         var expense = await _expenseRepository.GetByIdAsync(id);
         if (expense == null)
         {
-            SweetAlertHelper.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
+            SweetAlert.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
             return RedirectToAction("Index");
         }
 
@@ -155,7 +167,7 @@ public class ExpenseController : Controller
         );
         if (userExpense == null)
         {
-            SweetAlertHelper.Error(
+            SweetAlert.Error(
                 TempData,
                 "Tidak Diizinkan",
                 "Anda tidak memiliki akses ke expense ini"
@@ -166,13 +178,13 @@ public class ExpenseController : Controller
         var expense = await _expenseRepository.GetByIdAsync(id);
         if (expense == null)
         {
-            SweetAlertHelper.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
+            SweetAlert.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
             return RedirectToAction("Index");
         }
 
         if (amount <= 0)
         {
-            SweetAlertHelper.Error(TempData, "Input Gagal", "Amount harus lebih dari 0");
+            SweetAlert.Error(TempData, "Input Gagal", "Amount harus lebih dari 0");
             return View(expense);
         }
 
@@ -184,7 +196,7 @@ public class ExpenseController : Controller
         await _expenseRepository.UpdateAsync(expense);
 
         _logger.LogInformation($"Expense {id} berhasil diupdate oleh user {userId}");
-        SweetAlertHelper.Success(TempData, "Update Berhasil", "Expense berhasil diupdate.");
+        SweetAlert.Success(TempData, "Update Berhasil", "Expense berhasil diupdate.");
         return RedirectToAction("Index");
     }
 
@@ -200,7 +212,7 @@ public class ExpenseController : Controller
         );
         if (userExpense == null)
         {
-            SweetAlertHelper.Error(
+            SweetAlert.Error(
                 TempData,
                 "Tidak Diizinkan",
                 "Anda tidak memiliki akses ke expense ini"
@@ -211,7 +223,7 @@ public class ExpenseController : Controller
         var expense = await _expenseRepository.GetByIdAsync(id);
         if (expense == null)
         {
-            SweetAlertHelper.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
+            SweetAlert.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
             return RedirectToAction("Index");
         }
 
@@ -222,7 +234,7 @@ public class ExpenseController : Controller
         await _userExpenseRepository.DeleteAsync(userExpense);
 
         _logger.LogInformation($"Expense {id} berhasil dihapus oleh user {userId}");
-        SweetAlertHelper.Success(TempData, "Hapus Berhasil", "Expense berhasil dihapus.");
+        SweetAlert.Success(TempData, "Hapus Berhasil", "Expense berhasil dihapus.");
         return RedirectToAction("Index");
     }
 }

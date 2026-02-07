@@ -1,9 +1,9 @@
-@using AccountingApp.Helpers
+@using AccountingApp.Utils
 @model AccountingApp.Models.Expense
 
 @{
     ViewData["Title"] = "Edit Expense";
-    var paymentMethodOptions = PaymentMethodHelper.GetPaymentMethodList();
+    var paymentMethodOptions = PaymentMethod.GetPaymentMethodList();
 }
 
 <div class="container mt-5">

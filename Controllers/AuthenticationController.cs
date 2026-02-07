@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using AccountingApp.Data;
-using AccountingApp.Helpers;
 using AccountingApp.Interfaces;
 using AccountingApp.Models;
 using AccountingApp.Repositories;
+using AccountingApp.Utils;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,14 +35,14 @@ public class AuthenticationController : Controller
     {
         if (!ModelState.IsValid)
         {
-            SweetAlertHelper.Error(TempData, "Login Gagal", "Username dan password harus diisi");
+            SweetAlert.Error(TempData, "Login Gagal", "Username dan password harus diisi");
             return View(model); // Pass the model back to preserve input
         }
 
         var user = await _userRepository.GetUserByUsernameAsync(model.Username);
         if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
         {
-            SweetAlertHelper.Error(
+            SweetAlert.Error(
                 TempData,
                 "Login Gagal",
                 "Gagal melakukan login. Periksa kembali username dan password Anda."
@@ -79,22 +79,14 @@ public class AuthenticationController : Controller
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            SweetAlertHelper.Error(
-                TempData,
-                "Registrasi Gagal",
-                "Username dan password harus diisi"
-            );
+            SweetAlert.Error(TempData, "Registrasi Gagal", "Username dan password harus diisi");
             return View("Registration");
         }
 
         // Check if username already exists
         if (await _userRepository.IsUserExistsAsync(username))
         {
-            SweetAlertHelper.Error(
-                TempData,
-                "Registrasi Gagal",
-                "Tidak dapat melakukan registrasi."
-            );
+            SweetAlert.Error(TempData, "Registrasi Gagal", "Tidak dapat melakukan registrasi.");
             return RedirectToAction("Registration");
         }
 
@@ -112,11 +104,7 @@ public class AuthenticationController : Controller
         await _userRepository.CreateAsync(newUser);
 
         _logger.LogInformation($"User {username} berhasil registrasi");
-        SweetAlertHelper.Success(
-            TempData,
-            "Registrasi Berhasil",
-            "Registrasi berhasil. Silakan login."
-        );
+        SweetAlert.Success(TempData, "Registrasi Berhasil", "Registrasi berhasil. Silakan login.");
         return RedirectToAction("Index");
     }
 

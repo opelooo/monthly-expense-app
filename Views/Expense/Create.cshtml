@@ -1,9 +1,9 @@
-@using AccountingApp.Helpers
+@using AccountingApp.Utils
 @model AccountingApp.Models.Expense
 
 @{
     ViewData["Title"] = "Tambah Expense";
-    var paymentMethodOptions = PaymentMethodHelper.GetPaymentMethodList();
+    var paymentMethodOptions = PaymentMethod.GetPaymentMethodList();
 }
 
 <div class="container mt-5">
@@ -12,6 +12,7 @@
             <h2>Tambah Expense</h2>
             <form method="post" action="/Expense/Create">
                 @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                 <div class="form-group mb-3">
                     <label for="amount">Amount *</label>
                     <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
@@ -40,7 +41,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Tambah</button>
-                <a href="/Expense" class="btn btn-secondary">Batal</a>
+                <a href="@(ViewBag.ReturnUrl ?? "/Expense/Index")" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

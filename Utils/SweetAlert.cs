@@ -3,9 +3,9 @@ using AccountingApp.Enums;
 using AccountingApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace AccountingApp.Helpers
+namespace AccountingApp.Utils
 {
-    public static class SweetAlertHelper
+    public static class SweetAlert
     {
         // Constructor-like method for quick alert setup
         public static void SetAlert(
