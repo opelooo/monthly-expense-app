@@ -74,7 +74,7 @@ else
                             <th>Deskripsi</th>
                             <th>Payment Method</th>
                             <th class="text-end">Amount</th>
-                            <th class="text-center">Aksi</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -171,21 +171,4 @@ else
         const pageSize = this.value;
         window.location.href = `/Expense?page=1&pageSize=${pageSize}`;
     });
-
-    function confirmDelete(btn) {
-        Swal.fire({
-            title: 'Hapus Expense?',
-            text: 'Anda yakin ingin menghapus expense ini?',
-            icon: 'warning',
-            confirmButtonText: 'Ya, Hapus',
-            cancelButtonText: 'Batal',
-            showCancelButton: true,
-            confirmButtonColor: '#dc3545',
-            cancelButtonColor: '#6c757d'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                btn.form.submit();
-            }
-        });
-    }
 </script>
