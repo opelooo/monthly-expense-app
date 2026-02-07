@@ -40,38 +40,66 @@ button.accept-policy {
   line-height: inherit;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+/* Light mode specific styles - remove gradient background */
+html, body {
+  height: 100%;
 }
 
 body {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+header {
+  flex-shrink: 0;
+}
+
+body > .container {
+  flex: 1 0 auto;
+}
+
+.footer {
+  flex-shrink: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+  margin-top: auto;
+}
+
 .login-card {
   border-radius: 12px;
   box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
+
 .login-card:hover {
   transform: translateY(-3px);
 }
+
 .btn-primary {
   background-color: #0d6efd;
   border-color: #0d6efd;
 }
+
 .btn-primary:hover {
   background-color: #0b5ed7;
   border-color: #0a58ca;
 }
+
 .form-control:focus {
   border-color: #86b7fe;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.custom-icon {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-icon i {
+  font-size: 1.5rem;
 }
