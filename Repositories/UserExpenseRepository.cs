@@ -56,7 +56,7 @@ namespace AccountingApp.Repositories
             {
                 var result = await _context
                     .UserExpenses.Where(ue => ue.UserId == userId)
-                    .OrderByDescending(ue => ue.CreatedAt)
+                    .OrderByDescending(ue => ue.Expense!.ExpenseDate)
                     .Select(ue => new
                     {
                         // Ambil data utama

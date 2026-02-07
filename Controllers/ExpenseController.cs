@@ -3,6 +3,7 @@ using AccountingApp.Models;
 using AccountingApp.Repositories;
 using AccountingApp.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AccountingApp.Controllers;
 
@@ -108,7 +109,7 @@ public class ExpenseController : Controller
         _logger.LogInformation(
             $"Expense dengan amount {amount} berhasil ditambahkan untuk user {userId}"
         );
-        SweetAlert.Success(TempData, "Expense Berhasil", "Expense berhasil ditambahkan.");
+        SweetAlert.Success(TempData, "Pembuatan Berhasil", "Expense berhasil ditambahkan.");
         // Gunakan LocalRedirect untuk URL mentah (path) agar aman dari Open Redirect Attack
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         {
@@ -223,18 +224,48 @@ public class ExpenseController : Controller
         var expense = await _expenseRepository.GetByIdAsync(id);
         if (expense == null)
         {
-            SweetAlert.Error(TempData, "Tidak Ditemukan", "Expense tidak ditemukan");
+            SweetAlert.Error(
+                TempData,
+                "Tidak Ditemukan",
+                "Expense tidak ditemukan atau sudah dihapus."
+            );
             return RedirectToAction("Index");
         }
 
-        // Delete the expense (UserExpense will be deleted due to cascade delete)
-        await _expenseRepository.DeleteAsync(expense);
+        try
+        {
+            // Delete userExpense first, then expense (avoid cascade delete conflict)
+            await _userExpenseRepository.DeleteAsync(userExpense);
+            await _expenseRepository.DeleteAsync(expense);
 
-        // Also delete the user expense record explicitly if cascade isn't working
-        await _userExpenseRepository.DeleteAsync(userExpense);
+            _logger.LogInformation($"Expense {id} berhasil dihapus oleh user {userId}");
+            SweetAlert.Success(TempData, "Hapus Berhasil", "Expense berhasil dihapus.");
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            // Entity mungkin sudah dihapus, coba refresh dan cek
+            _logger.LogWarning($"Concurrency error saat menghapus expense {id} oleh user {userId}");
 
-        _logger.LogInformation($"Expense {id} berhasil dihapus oleh user {userId}");
-        SweetAlert.Success(TempData, "Hapus Berhasil", "Expense berhasil dihapus.");
+            // Cek lagi apakah expense sudah dihapus
+            var expenseStillExists = await _expenseRepository.AnyAsync(e => e.Id == id);
+            if (!expenseStillExists)
+            {
+                SweetAlert.Success(
+                    TempData,
+                    "Sudah Dihapus",
+                    "Expense ini sudah dihapus sebelumnya."
+                );
+            }
+            else
+            {
+                SweetAlert.Error(
+                    TempData,
+                    "Gagal",
+                    "Expense tidak dapat dihapus. Silakan coba lagi."
+                );
+            }
+        }
+
         return RedirectToAction("Index");
     }
 }

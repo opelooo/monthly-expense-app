@@ -41,16 +41,30 @@ public class HomeController : Controller
             e.ExpenseDate.Date >= startOfMonth && e.ExpenseDate.Date <= endOfMonth
         );
 
+        var totalExpenses = expenses.Sum(e => e.Amount);
+        var thisMonthExpenses = monthExpenses.Sum(e => e.Amount);
+        var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
+        var avgPerDay = daysInMonth > 0 ? thisMonthExpenses / daysInMonth : 0;
+
+        // Calculate percentage for each payment method
+        var expensesByPaymentMethod = expenses
+            .GroupBy(e => e.PaymentMethod)
+            .ToDictionary(g => g.Key, g => g.Sum(e => e.Amount));
+        var expensesByPaymentMethodPercent = expensesByPaymentMethod.ToDictionary(
+            kvp => kvp.Key,
+            kvp => totalExpenses > 0 ? (double)(kvp.Value / totalExpenses * 100) : 0
+        );
+
         var dashboardViewModel = new DashboardViewModel
         {
-            TotalExpenses = expenses.Sum(e => e.Amount),
+            TotalExpenses = totalExpenses,
             TodayExpenses = todayExpenses.Sum(e => e.Amount),
-            ThisMonthExpenses = monthExpenses.Sum(e => e.Amount),
+            ThisMonthExpenses = thisMonthExpenses,
+            AvgPerDay = avgPerDay,
             TotalExpenseCount = expenses.Count(),
             RecentExpenses = expenses.OrderByDescending(e => e.ExpenseDate).Take(10),
-            ExpensesByPaymentMethod = expenses
-                .GroupBy(e => e.PaymentMethod)
-                .ToDictionary(g => g.Key, g => g.Sum(e => e.Amount)),
+            ExpensesByPaymentMethod = expensesByPaymentMethod,
+            ExpensesByPaymentMethodPercent = expensesByPaymentMethodPercent,
         };
 
         return View(dashboardViewModel);

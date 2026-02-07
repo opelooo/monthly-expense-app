@@ -14,7 +14,7 @@
                 @Html.AntiForgeryToken()
                 <div class="form-group mb-3">
                     <label for="amount">Amount *</label>
-                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="@Model.Amount" required>
+                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="@Model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture)" required>
                 </div>
 
                 <div class="form-group mb-3">

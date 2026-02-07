@@ -7,7 +7,7 @@ namespace AccountingApp.Models
         public string ExpenseId { get; set; } = string.Empty;
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-        // Navigation properties
+        // Navigation properties (optional for creation)
         public User? User { get; set; }
         public Expense? Expense { get; set; }
     }
