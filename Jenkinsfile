@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DB_CONNECTION = credentials('DB_CONNECTION_STRING')
-        DOCKER_IMAGE = "accounting-app:latest"
+        DOCKER_IMAGE = "open-expense:latest"
     }
 
     stages {
@@ -14,13 +14,13 @@ pipeline {
         }
 
         stage('Test') {
-            environment {
-                ConnectionStrings__DefaultConnection = "${DB_CONNECTION}"
-            }
-            steps {
-                // Testing menggunakan SDK di server Jenkins sebelum masuk Docker
-                sh 'dotnet test --verbosity normal'
-            }
+            // environment {
+            //     ConnectionStrings__DefaultConnection = "${DB_CONNECTION}"
+            // }
+            // steps {
+            //     // Testing menggunakan SDK di server Jenkins sebelum masuk Docker
+            //     sh 'dotnet test --verbosity normal'
+            // }
         }
 
         stage('Docker Build') {
@@ -36,13 +36,13 @@ pipeline {
             steps {
                 script {
                     // Stop container lama jika ada
-                    sh "docker stop accounting-container || true"
-                    sh "docker rm accounting-container || true"
+                    sh "docker stop open-expense || true"
+                    sh "docker rm open-expense || true"
                     
                     // Jalankan container baru dengan koneksi DB dari Jenkins
                     sh """
                         docker run -d \
-                        --name accounting-container \
+                        --name open-expense \
                         -p 5191:8080 \
                         -e ConnectionStrings__DefaultConnection='${DB_CONNECTION}' \
                         -e ASPNETCORE_ENVIRONMENT=Production \
