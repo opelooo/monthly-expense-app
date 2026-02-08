@@ -17,8 +17,8 @@ RUN dotnet publish "OpenExpenseApp.csproj" -c Release -o /app/publish -a $TARGET
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
 WORKDIR /app
 
-COPY --from=build /usr/lib/libicu* /usr/lib/
-COPY --from=build /usr/share/icu /usr/share/icu
+# Install ICU libraries in the final runtime image
+RUN apk add --no-cache icu-libs icu-data-full
 
 COPY --from=build /app/publish .
 
