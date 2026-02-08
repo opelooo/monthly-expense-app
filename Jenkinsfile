@@ -13,15 +13,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            // environment {
-            //     ConnectionStrings__DefaultConnection = "${DB_CONNECTION}"
-            // }
-            // steps {
-            //     // Testing menggunakan SDK di server Jenkins sebelum masuk Docker
-            //     sh 'dotnet test --verbosity normal'
-            // }
-        }
+        // stage('Test') {
+        //     environment {
+        //         ConnectionStrings__DefaultConnection = "${DB_CONNECTION}"
+        //     }
+        //     steps {
+        //         // Testing menggunakan SDK di server Jenkins sebelum masuk Docker
+        //         sh 'dotnet test --verbosity normal'
+        //     }
+        // }
 
         stage('Docker Build') {
             steps {
