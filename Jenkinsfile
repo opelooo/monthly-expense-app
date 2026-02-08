@@ -4,6 +4,8 @@ pipeline {
     environment {
         DB_CONNECTION = credentials('DB_CONNECTION_STRING')
         DOCKER_IMAGE = "open-expense:latest"
+        REGISTRY_SERVER = "registry.opeloooco.uk"
+        REG_AUTH = credentials('REGISTRY_AUTH')
     }
 
     stages {
@@ -26,8 +28,11 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
+                    sh "echo ${REG_AUTH_PSW} | docker login ${REGISTRY} -u ${REG_AUTH_USR} --password-stdin"
                     // Membangun image menggunakan Dockerfile Alpine tadi
-                    sh "docker build -t ${DOCKER_IMAGE} ."
+                    sh "docker build -t ${REGISTRY_SERVER}/${DOCKER_IMAGE} ."
+                    // push ke registry personal
+                    sh "docker push ${REGISTRY}/${IMAGE_NAME}:latest"
                 }
             }
         }
