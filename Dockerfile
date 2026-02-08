@@ -1,5 +1,5 @@
 # 1. Build Stage (Native AMD64)
-FROM --platform=$BUILDPLATFORM ://mcr.microsoft.com AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 ARG TARGETARCH
 WORKDIR /src
 
@@ -17,7 +17,7 @@ COPY . .
 RUN dotnet publish "OpenExpenseApp.csproj" -c Release -o /app/publish -a $TARGETARCH --self-contained false
 
 # 2. Final Stage (Target ARM64)
-FROM ://mcr.microsoft.com AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
 WORKDIR /app
 
 # Switch to root just for the COPY and Entrypoint
