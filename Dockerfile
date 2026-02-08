@@ -16,8 +16,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Install ICU for globalization support
-RUN apk add --no-cache icu-libs
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
 
 ENTRYPOINT ["dotnet", "OpenExpenseApp.dll"]
