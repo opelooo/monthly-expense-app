@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         DB_CONNECTION = credentials('DB_CONNECTION_STRING')
-        DOCKER_IMAGE = "open-expense:latest"
+        DOCKER_IMAGE_NAME = "open-expense"
+        DOCKER_TAG = "latest"
         REGISTRY_SERVER = "registry.opeloooco.uk"
         REG_AUTH = credentials('REGISTRY_AUTH')
     }
@@ -28,11 +29,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    sh "echo ${REG_AUTH_PSW} | docker login ${REGISTRY} -u ${REG_AUTH_USR} --password-stdin"
-                    // Membangun image menggunakan Dockerfile Alpine tadi
-                    sh "docker build -t ${REGISTRY_SERVER}/${DOCKER_IMAGE} ."
-                    // push ke registry personal
-                    sh "docker push ${REGISTRY}/${IMAGE_NAME}:latest"
+                    // Gunakan single quotes '' agar password tidak bocor di log
+                    // Gunakan REGISTRY_SERVER (sesuai environment di atas)
+                    sh 'echo ${REG_AUTH_PSW} | docker login ${REGISTRY_SERVER} -u ${REG_AUTH_USR} --password-stdin'
+                    
+                    // Build dengan format: registry.opeloooco.uk/open-expense:latest
+                    sh "docker build -t ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ."
+                    
+                    // Push ke registry
+                    sh "docker push ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}"
                 }
             }
         }
@@ -40,18 +45,17 @@ pipeline {
         stage('Docker Run/Deploy') {
             steps {
                 script {
-                    // Stop container lama jika ada
                     sh "docker stop open-expense || true"
                     sh "docker rm open-expense || true"
                     
-                    // Jalankan container baru dengan koneksi DB dari Jenkins
+                    // Jalankan container menggunakan image yang baru di-push
                     sh """
                         docker run -d \
                         --name open-expense \
                         -p 3001:8080 \
                         -e ConnectionStrings__DefaultConnection='${DB_CONNECTION}' \
                         -e ASPNETCORE_ENVIRONMENT=Production \
-                        ${DOCKER_IMAGE}
+                        ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
                     """
                 }
             }
