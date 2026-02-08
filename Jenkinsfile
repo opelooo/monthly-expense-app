@@ -62,7 +62,8 @@ pipeline {
                     sh """
                         podman run -d \
                         --name open-expense \
-                        -p 3000:8080 \
+                        --net=host \
+                        -e ASPNETCORE_URLS="http://+:3000" \
                         -e ConnectionStrings__DefaultConnection='${DB_CONNECTION}' \
                         -e ASPNETCORE_ENVIRONMENT=Production \
                         --restart always \
