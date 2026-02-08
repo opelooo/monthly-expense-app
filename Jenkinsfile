@@ -27,6 +27,7 @@ pipeline {
         // }
 
         stage('Docker Build') {
+            agent { label 'master' }
             steps {
                 script {
                     // Gunakan single quotes '' agar password tidak bocor di log
@@ -38,23 +39,33 @@ pipeline {
                     
                     // Push ke registry
                     sh "docker push ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}"
+                    // sh "docker buildx build --platform linux/arm64 -t ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} --push ."
                 }
             }
         }
 
         stage('Docker Run/Deploy') {
+            agent { label 'orangepi' }
             steps {
                 script {
-                    sh "docker stop open-expense || true"
-                    sh "docker rm open-expense || true"
+                    // Login Podman (Gunakan --tls-verify=false jika registry kamu belum HTTPS)
+                    sh 'echo ${REG_AUTH_PSW} | podman login ${REGISTRY_SERVER} -u ${REG_AUTH_USR} --password-stdin'
                     
-                    // Jalankan container menggunakan image yang baru di-push
+                    // Stop & Remove lama
+                    sh "podman stop open-expense || true"
+                    sh "podman rm open-expense || true"
+                    
+                    // Pull image ARM64 dari registry
+                    sh "podman pull ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}"
+                    
+                    // Run menggunakan Podman
                     sh """
-                        docker run -d \
+                        podman run -d \
                         --name open-expense \
                         -p 3001:8080 \
                         -e ConnectionStrings__DefaultConnection='${DB_CONNECTION}' \
                         -e ASPNETCORE_ENVIRONMENT=Production \
+                        --restart always \
                         ${REGISTRY_SERVER}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
                     """
                 }
