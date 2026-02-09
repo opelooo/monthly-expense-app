@@ -11,6 +11,7 @@ public partial class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Expense> Expenses { get; set; }
     public DbSet<UserExpense> UserExpenses { get; set; }
+    public DbSet<Income> Incomes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,5 +20,6 @@ public partial class ApplicationDbContext : DbContext
         ConfigureUserEntity(modelBuilder);
         ConfigureExpenseEntity(modelBuilder);
         ConfigureUserExpenseEntity(modelBuilder);
+        ConfigureIncomeEntity(modelBuilder);
     }
 }
