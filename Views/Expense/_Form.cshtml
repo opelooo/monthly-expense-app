@@ -2,22 +2,27 @@
 @model AccountingApp.Models.Expense
 
 @{
-    var isEdit = Model != null && !string.IsNullOrEmpty(Model.Id);
+    if (Model == null)
+    {
+        Context.Response.Redirect(ViewBag.ReturnUrl ?? "/Expense/Index");
+        return;
+    }
+    var isEdit = !string.IsNullOrEmpty(Model.Id);
     ViewData["Title"] = isEdit ? "Edit Expense" : "Tambah Expense";
     var paymentMethodOptions = PaymentMethod.GetPaymentMethodList();
 
     // Determine form action
-    var formAction = isEdit ? $"/Expense/Edit/{Model!.Id}" : "/Expense/Create";
+    var formAction = isEdit ? $"/Expense/Edit/{Model.Id}" : "/Expense/Create";
 
     // Determine button text
     var buttonText = isEdit ? "Update" : "Tambah";
     var pageTitle = isEdit ? "Edit Expense" : "Tambah Expense";
 
     // Get values for form fields
-    var amount = isEdit ? Model!.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
-    var expenseDate = isEdit ? Model!.ExpenseDate.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
-    var description = isEdit ? (Model!.Description ?? "") : "";
-    var paymentMethod = isEdit ? Model!.PaymentMethod : "";
+    var amount = isEdit ? Model.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    var expenseDate = isEdit ? Model.ExpenseDate.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var description = isEdit ? (Model.Description ?? "") : "";
+    var paymentMethod = isEdit ? Model.PaymentMethod : "";
 }
 
 <div class="container mt-5">
@@ -29,14 +34,12 @@
                 <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                 <div class="form-group mb-3">
                     <label for="amount">Amount *</label>
-                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="@amount"
-                           required>
+                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="@amount" required>
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="expenseDate">Tanggal Expense *</label>
-                    <input type="date" class="form-control" id="expenseDate" name="expenseDate" value="@expenseDate"
-                           required>
+                    <input type="date" class="form-control" id="expenseDate" name="expenseDate" value="@expenseDate" required>
                 </div>
 
                 <div class="form-group mb-3">
