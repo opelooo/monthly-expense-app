@@ -1,0 +1,70 @@
+@using AccountingApp.Utils
+@model AccountingApp.Models.Expense
+
+@{
+    var isEdit = Model != null && !string.IsNullOrEmpty(Model.Id);
+    ViewData["Title"] = isEdit ? "Edit Expense" : "Tambah Expense";
+    var paymentMethodOptions = PaymentMethod.GetPaymentMethodList();
+
+    // Determine form action
+    var formAction = isEdit ? $"/Expense/Edit/{Model!.Id}" : "/Expense/Create";
+
+    // Determine button text
+    var buttonText = isEdit ? "Update" : "Tambah";
+    var pageTitle = isEdit ? "Edit Expense" : "Tambah Expense";
+
+    // Get values for form fields
+    var amount = isEdit ? Model!.Amount.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    var expenseDate = isEdit ? Model!.ExpenseDate.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var description = isEdit ? (Model!.Description ?? "") : "";
+    var paymentMethod = isEdit ? Model!.PaymentMethod : "";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>@pageTitle</h2>
+            <form method="post" action="@formAction">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <div class="form-group mb-3">
+                    <label for="amount">Amount *</label>
+                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" value="@amount"
+                           required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="expenseDate">Tanggal Expense *</label>
+                    <input type="date" class="form-control" id="expenseDate" name="expenseDate" value="@expenseDate"
+                           required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="description">Deskripsi</label>
+                    <textarea class="form-control" id="description" name="description" rows="3">@description</textarea>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="paymentMethod">Payment Method *</label>
+                    <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                        <option value="">-- Pilih Payment Method --</option>
+                        @foreach (var method in paymentMethodOptions)
+                        {
+                            @if (paymentMethod == method.Value)
+                            {
+                                <option value="@method.Value" selected>@method.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@method.Value">@method.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">@buttonText</button>
+                <a href="@(ViewBag.ReturnUrl ?? "/Expense/Index")" class="btn btn-secondary">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
