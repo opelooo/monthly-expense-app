@@ -23,7 +23,7 @@ public class HomeController : Controller
     {
         if (HttpContext.Session.GetString("UserId") == null)
         {
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Authentication");
         }
 
         var userId = HttpContext.Session.GetString("UserId")!;

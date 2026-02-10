@@ -1,5 +1,6 @@
 using AccountingApp.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AccountingApp.Data;
 
@@ -13,7 +14,9 @@ public partial class ApplicationDbContext
             entity.ToTable("incomes", "public");
             entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.Id).HasColumnName("id").UseIdentityColumn().IsRequired();
+            entity.Property(e => e.Id).HasColumnName("id").HasMaxLength(26).IsRequired();
+
+            entity.Property(e => e.UserId).HasColumnName("user_id").HasMaxLength(26).IsRequired();
 
             entity
                 .Property(e => e.SourceName)
@@ -38,14 +41,17 @@ public partial class ApplicationDbContext
                 .HasColumnName("tax_withheld")
                 .HasColumnType("numeric");
 
-            entity.Property(e => e.ReceivedDate).HasColumnName("received_date").IsRequired();
+            entity
+                .Property(e => e.ReceivedDate)
+                .HasColumnName("received_date")
+                .HasColumnType("date")
+                .IsRequired();
 
             entity.Property(e => e.IsTaxable).HasColumnName("is_taxable").HasDefaultValue(true);
 
             entity
                 .Property(e => e.CreatedAt)
                 .HasColumnName("created_at")
-                .HasColumnType("timestamp without time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
         });
     }

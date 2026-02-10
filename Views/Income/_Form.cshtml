@@ -1,0 +1,70 @@
+@model AccountingApp.Models.Income
+
+@{
+    var isEdit = !string.IsNullOrEmpty(Model.Id);
+    ViewData["Title"] = isEdit ? "Edit Income" : "Tambah Income";
+    
+    // Determine form action
+    var formAction = isEdit ? $"/Income/Edit/{Model.Id}" : "/Income/Create";
+    
+    // Determine button text
+    var buttonText = isEdit ? "Update" : "Tambah";
+    var pageTitle = isEdit ? "Edit Income" : "Tambah Income";
+    
+    // Get values for form fields
+    var sourceName = isEdit ? Model.SourceName : "";
+    var incomeType = isEdit ? Model.IncomeType : "";
+    var grossAmount = isEdit ? Model.GrossAmount.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    var receivedDate = isEdit ? Model.ReceivedDate.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
+    var taxWithheld = isEdit && Model.TaxWithheld.HasValue ? Model.TaxWithheld.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    var isTaxable = isEdit ? Model.IsTaxable : true;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>@pageTitle</h2>
+            <form method="post" action="@formAction" lang="en">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                
+                <div class="form-group mb-3">
+                    <label for="sourceName">Source Name *</label>
+                    <input type="text" class="form-control" id="sourceName" name="sourceName" value="@sourceName" placeholder="e.g., Salary, Freelance, Investment" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="incomeType">Income Type *</label>
+                    <input type="text" class="form-control" id="incomeType" name="incomeType" value="@incomeType" placeholder="e.g., Salary, Bonus, Interest" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="grossAmount">Gross Amount *</label>
+                    <input type="number" class="form-control" id="grossAmount" name="grossAmount" step="0.01" value="@grossAmount" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="receivedDate">Received Date *</label>
+                    <input type="date" class="form-control" id="receivedDate" name="receivedDate" value="@receivedDate" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="taxWithheld">Tax Withheld</label>
+                    <input type="number" class="form-control" id="taxWithheld" name="taxWithheld" step="0.01" value="@taxWithheld" placeholder="0.00">
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isTaxable" name="isTaxable" value="true" @(Model.IsTaxable ? "checked" : "")>
+                        <label class="form-check-label" for="isTaxable">
+                            Is Taxable Income
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">@buttonText</button>
+                <a href="@(ViewBag.ReturnUrl ?? "/Income/Index")" class="btn btn-secondary">Batal</a>
+            </form>
+        </div>
+    </div>
+</div>
