@@ -370,3 +370,142 @@ html {
 [data-theme="dark"] a:not(.btn):hover {
   color: #9ec5fe;
 }
+
+/* ============================================
+   SKELETON LOADING STYLES
+   ============================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-primary) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 4px;
+  color: transparent !important;
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    #3d4248 25%,
+    #495057 50%,
+    #3d4248 75%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Skeleton for cards */
+.skeleton-card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  border-radius: 0.5rem;
+}
+
+.skeleton-card .card-body {
+  padding: 1rem;
+}
+
+/* Skeleton text lines */
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-text.title {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-text.amount {
+  height: 2rem;
+  width: 80%;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-text.subtitle {
+  height: 0.875rem;
+  width: 40%;
+}
+
+/* Skeleton for icons */
+.skeleton-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+}
+
+/* Skeleton for tables */
+.skeleton-table .skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-table .skeleton-text:first-child {
+  width: 15%;
+}
+
+.skeleton-table .skeleton-text:nth-child(2) {
+  width: 35%;
+}
+
+.skeleton-table .skeleton-text:nth-child(3) {
+  width: 20%;
+}
+
+.skeleton-table .skeleton-text:nth-child(4) {
+  width: 20%;
+}
+
+/* Skeleton for progress bars */
+.skeleton-progress {
+  height: 0.5rem;
+  width: 100%;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Fade in animation for loaded content */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dashboard skeleton wrapper */
+#dashboard-skeleton {
+  display: block;
+}
+
+#dashboard-content {
+  display: none;
+}
+
+#dashboard-content.loaded {
+  display: block;
+}
