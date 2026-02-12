@@ -1,9 +1,9 @@
-using AccountingApp.Data;
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
+using OpenExpenseApp.Data;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccountingApp.Repositories
+namespace OpenExpenseApp.Repositories
 {
     /// <summary>
     /// User-specific repository implementation

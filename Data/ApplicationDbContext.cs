@@ -1,7 +1,7 @@
-using AccountingApp.Models;
+using OpenExpenseApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccountingApp.Data;
+namespace OpenExpenseApp.Data;
 
 public partial class ApplicationDbContext : DbContext
 {

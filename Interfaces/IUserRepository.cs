@@ -1,6 +1,6 @@
-using AccountingApp.Models;
+using OpenExpenseApp.Models;
 
-namespace AccountingApp.Interfaces
+namespace OpenExpenseApp.Interfaces
 {
     /// <summary>
     /// User-specific repository interface

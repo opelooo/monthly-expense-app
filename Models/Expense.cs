@@ -1,4 +1,4 @@
-namespace AccountingApp.Models
+namespace OpenExpenseApp.Models
 {
     public class Expense
     {
@@ -10,6 +10,6 @@ namespace AccountingApp.Models
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
         // Navigation property
-        public ICollection<UserExpense> UserExpenses { get; set; } = new List<UserExpense>();
+        public ICollection<UserExpense> UserExpenses { get; set; } = [];
     }
 }

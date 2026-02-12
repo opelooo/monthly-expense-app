@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingApp.Controllers;
+namespace OpenExpenseApp.Controllers;
 
 public class HomeController : Controller
 {

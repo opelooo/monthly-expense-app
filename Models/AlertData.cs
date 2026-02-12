@@ -1,6 +1,6 @@
-using AccountingApp.Enums;
+using OpenExpenseApp.Enums;
 
-namespace AccountingApp.Models
+namespace OpenExpenseApp.Models
 {
     public class AlertData
     {

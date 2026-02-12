@@ -1,8 +1,8 @@
-namespace AccountingApp.Models
+namespace OpenExpenseApp.Models
 {
     public class PaginationModel<T>
     {
-        public List<T> Items { get; set; } = new();
+        public List<T> Items { get; set; } = [];
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public int TotalItems { get; set; }

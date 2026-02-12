@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingApp.Views.Shared.Components;
+namespace OpenExpenseApp.Views.Shared.Components;
 
 /// <summary>
 /// Reusable quick actions card component
 /// Usage: await Component.InvokeAsync("QuickActions", new { actions })
 /// </summary>
-public class QuickActionsCardViewComponent : ViewComponent
+public class QuickActionsViewComponent : ViewComponent
 {
-    public IViewComponentResult InvokeAsync(IEnumerable<QuickActionItem> actions)
+    public async Task<IViewComponentResult> InvokeAsync(IEnumerable<QuickActionItem> actions)
     {
-        return View(new QuickActionsCardViewModel { Actions = actions });
+        var model = new QuickActionsCardViewModel { Actions = actions };
+        return await Task.FromResult(View(model));
     }
 }
 

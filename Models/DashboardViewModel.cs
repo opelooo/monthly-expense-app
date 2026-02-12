@@ -1,4 +1,4 @@
-namespace AccountingApp.Models
+namespace OpenExpenseApp.Models
 {
     public class DashboardViewModel
     {
@@ -9,8 +9,8 @@ namespace AccountingApp.Models
         public int TotalExpenseCount { get; set; }
         public IEnumerable<Expense> RecentExpenses { get; set; } = new List<Expense>();
         public Dictionary<string, decimal> ExpensesByPaymentMethod { get; set; } =
-            new Dictionary<string, decimal>();
+            [];
         public Dictionary<string, double> ExpensesByPaymentMethodPercent { get; set; } =
-            new Dictionary<string, double>();
+            [];
     }
 }

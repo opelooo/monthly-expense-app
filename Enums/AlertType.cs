@@ -1,4 +1,4 @@
-namespace AccountingApp.Enums
+namespace OpenExpenseApp.Enums
 {
     public enum AlertType
     {

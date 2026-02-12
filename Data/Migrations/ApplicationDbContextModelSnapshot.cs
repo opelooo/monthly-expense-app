@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using AccountingApp.Data;
+using OpenExpenseApp.Data;
 
 #nullable disable
 
-namespace AccountingApp.Data.Migrations
+namespace OpenExpenseApp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace AccountingApp.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AccountingApp.Models.Expense", b =>
+            modelBuilder.Entity("OpenExpenseApp.Models.Expense", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(26)
@@ -64,7 +64,7 @@ namespace AccountingApp.Data.Migrations
                     b.ToTable("expenses", "public");
                 });
 
-            modelBuilder.Entity("AccountingApp.Models.Income", b =>
+            modelBuilder.Entity("OpenExpenseApp.Models.Income", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(26)
@@ -110,7 +110,7 @@ namespace AccountingApp.Data.Migrations
                     b.ToTable("incomes", "public");
                 });
 
-            modelBuilder.Entity("AccountingApp.Models.User", b =>
+            modelBuilder.Entity("OpenExpenseApp.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(26)
@@ -136,7 +136,7 @@ namespace AccountingApp.Data.Migrations
                     b.ToTable("users", "public");
                 });
 
-            modelBuilder.Entity("AccountingApp.Models.UserExpense", b =>
+            modelBuilder.Entity("OpenExpenseApp.Models.UserExpense", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(26)

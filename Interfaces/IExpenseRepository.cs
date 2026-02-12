@@ -1,6 +1,6 @@
-using AccountingApp.Models;
+using OpenExpenseApp.Models;
 
-namespace AccountingApp.Interfaces
+namespace OpenExpenseApp.Interfaces
 {
     public interface IExpenseRepository : IRepository<Expense>
     {

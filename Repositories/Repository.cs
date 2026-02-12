@@ -1,9 +1,9 @@
 using System.Linq.Expressions;
-using AccountingApp.Data;
-using AccountingApp.Interfaces;
+using OpenExpenseApp.Data;
+using OpenExpenseApp.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccountingApp.Repositories
+namespace OpenExpenseApp.Repositories
 {
     /// <summary>
     /// Generic repository implementation untuk semua entity

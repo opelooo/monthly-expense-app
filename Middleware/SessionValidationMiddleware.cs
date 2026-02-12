@@ -1,6 +1,6 @@
-using AccountingApp.Enums;
+using OpenExpenseApp.Enums;
 
-namespace AccountingApp.Middleware
+namespace OpenExpenseApp.Middleware
 {
     public class SessionValidationMiddleware
     {

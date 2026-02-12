@@ -1,4 +1,4 @@
-namespace AccountingApp.Models;
+namespace OpenExpenseApp.Models;
 
 public class ErrorViewModel
 {

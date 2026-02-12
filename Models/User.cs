@@ -1,4 +1,4 @@
-namespace AccountingApp.Models;
+namespace OpenExpenseApp.Models;
 
 public class User
 {
@@ -11,5 +11,5 @@ public class User
     public DateTime CreatedAt { get; set; }
 
     // Navigation property
-    public ICollection<UserExpense> UserExpenses { get; set; } = new List<UserExpense>();
+    public ICollection<UserExpense> UserExpenses { get; set; } = [];
 }

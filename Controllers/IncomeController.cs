@@ -1,11 +1,11 @@
 using System.Globalization;
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
-using AccountingApp.Utils;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
+using OpenExpenseApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccountingApp.Controllers;
+namespace OpenExpenseApp.Controllers;
 
 public class IncomeController : Controller
 {

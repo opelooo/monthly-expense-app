@@ -1,8 +1,8 @@
-using AccountingApp.Data;
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
+using OpenExpenseApp.Data;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
 
-namespace AccountingApp.Repositories
+namespace OpenExpenseApp.Repositories
 {
     public class IncomeRepository : Repository<Income>, IIncomeRepository
     {

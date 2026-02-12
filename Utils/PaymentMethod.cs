@@ -1,14 +1,14 @@
-using AccountingApp.Models;
+using OpenExpenseApp.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace AccountingApp.Utils
+namespace OpenExpenseApp.Utils
 {
     public static class PaymentMethod
     {
         public static List<SelectListItem> GetPaymentMethodOptions(string? selectedValue = null)
         {
-            return new List<SelectListItem>
-            {
+            return
+            [
                 new SelectListItem
                 {
                     Text = "Cash",
@@ -39,19 +39,19 @@ namespace AccountingApp.Utils
                     Value = "Other",
                     Selected = selectedValue == "Other",
                 },
-            };
+            ];
         }
 
         public static List<(string Value, string Text)> GetPaymentMethodList()
         {
-            return new List<(string, string)>
-            {
+            return
+            [
                 ("Cash", "Cash"),
                 ("Card", "Card"),
                 ("Bank", "Bank"),
                 ("E-Wallet", "E-Wallet"),
                 ("Other", "Other"),
-            };
+            ];
         }
     }
 }

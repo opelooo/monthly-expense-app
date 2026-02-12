@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingApp.Views.Shared.Components;
+namespace OpenExpenseApp.Views.Shared.Components;
 
 /// <summary>
 /// Reusable progress card component with progress bars
@@ -8,7 +8,7 @@ namespace AccountingApp.Views.Shared.Components;
 /// </summary>
 public class ProgressCardViewComponent : ViewComponent
 {
-    public IViewComponentResult InvokeAsync(
+    public async Task<IViewComponentResult> InvokeAsync(
         string title,
         string iconClass,
         Dictionary<string, decimal> items,
@@ -21,16 +21,16 @@ public class ProgressCardViewComponent : ViewComponent
             kvp => total > 0 ? (decimal)(kvp.Value / total * 100) : 0
         );
 
-        return View(
-            new ProgressCardViewModel
-            {
-                Title = title,
-                IconClass = iconClass,
-                Items = items,
-                PercentItems = percentItems,
-                EmptyMessage = emptyMessage,
-            }
-        );
+        var model = new ProgressCardViewModel
+        {
+            Title = title,
+            IconClass = iconClass,
+            Items = items,
+            PercentItems = percentItems,
+            EmptyMessage = emptyMessage,
+        };
+
+        return await Task.FromResult(View(model));
     }
 }
 
@@ -38,7 +38,7 @@ public class ProgressCardViewModel
 {
     public string Title { get; set; } = string.Empty;
     public string IconClass { get; set; } = string.Empty;
-    public Dictionary<string, decimal> Items { get; set; } = new();
-    public Dictionary<string, decimal> PercentItems { get; set; } = new();
+    public Dictionary<string, decimal> Items { get; set; } = [];
+    public Dictionary<string, decimal> PercentItems { get; set; } = [];
     public string EmptyMessage { get; set; } = "No data available";
 }

@@ -1,8 +1,8 @@
-using AccountingApp.Models;
+using OpenExpenseApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace AccountingApp.Data;
+namespace OpenExpenseApp.Data;
 
 public partial class ApplicationDbContext
 {

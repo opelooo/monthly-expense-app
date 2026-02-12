@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingApp.Views.Shared.Components;
+namespace OpenExpenseApp.Views.Shared.Components;
 
 /// <summary>
 /// Reusable summary card component for dashboard
@@ -8,7 +8,7 @@ namespace AccountingApp.Views.Shared.Components;
 /// </summary>
 public class SummaryCardViewComponent : ViewComponent
 {
-    public IViewComponentResult InvokeAsync(
+    public async Task<IViewComponentResult> InvokeAsync(
         string title,
         string value,
         string iconClass,
@@ -16,16 +16,16 @@ public class SummaryCardViewComponent : ViewComponent
         string? subtitle = null
     )
     {
-        return View(
-            new SummaryCardViewModel
-            {
-                Title = title,
-                Value = value,
-                IconClass = iconClass,
-                IconBgClass = iconBgClass,
-                Subtitle = subtitle,
-            }
-        );
+        var model = new SummaryCardViewModel
+        {
+            Title = title,
+            Value = value,
+            IconClass = iconClass,
+            IconBgClass = iconBgClass,
+            Subtitle = subtitle,
+        };
+
+        return await Task.FromResult(View(model));
     }
 }
 

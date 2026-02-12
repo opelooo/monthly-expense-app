@@ -1,9 +1,9 @@
 using System.Text.Json;
-using AccountingApp.Enums;
-using AccountingApp.Models;
+using OpenExpenseApp.Enums;
+using OpenExpenseApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace AccountingApp.Utils
+namespace OpenExpenseApp.Utils
 {
     public static class SweetAlert
     {

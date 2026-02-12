@@ -1,13 +1,13 @@
 using System.Diagnostics;
-using AccountingApp.Data;
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
-using AccountingApp.Repositories;
-using AccountingApp.Utils;
+using OpenExpenseApp.Data;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
+using OpenExpenseApp.Repositories;
+using OpenExpenseApp.Utils;
 using BCrypt.Net;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AccountingApp.Controllers;
+namespace OpenExpenseApp.Controllers;
 
 public class AuthenticationController : Controller
 {

@@ -1,11 +1,11 @@
-using AccountingApp.Interfaces;
-using AccountingApp.Models;
-using AccountingApp.Repositories;
-using AccountingApp.Utils;
+using OpenExpenseApp.Interfaces;
+using OpenExpenseApp.Models;
+using OpenExpenseApp.Repositories;
+using OpenExpenseApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AccountingApp.Controllers;
+namespace OpenExpenseApp.Controllers;
 
 public class ExpenseController : Controller
 {

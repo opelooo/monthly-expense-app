@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace AccountingApp.Interfaces
+namespace OpenExpenseApp.Interfaces
 {
     /// <summary>
     /// Generic repository interface untuk semua entity
