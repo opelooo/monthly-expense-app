@@ -12,9 +12,15 @@ public class ProgressCardViewComponent : ViewComponent
         string title,
         string iconClass,
         Dictionary<string, decimal> items,
-        string emptyMessage = "No data available"
+        string emptyMessage = "No data available",
+        bool isLoading = false
     )
     {
+        if (isLoading)
+        {
+            return View("_Skeleton");
+        }
+
         var total = items.Values.Sum();
         var percentItems = items.ToDictionary(
             kvp => kvp.Key,

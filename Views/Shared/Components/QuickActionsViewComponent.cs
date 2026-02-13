@@ -8,8 +8,16 @@ namespace OpenExpenseApp.Views.Shared.Components;
 /// </summary>
 public class QuickActionsViewComponent : ViewComponent
 {
-    public async Task<IViewComponentResult> InvokeAsync(IEnumerable<QuickActionItem> actions)
+    public async Task<IViewComponentResult> InvokeAsync(
+        IEnumerable<QuickActionItem> actions,
+        bool isLoading = false
+    )
     {
+        if (isLoading)
+        {
+            return View("_Skeleton");
+        }
+
         var model = new QuickActionsCardViewModel { Actions = actions };
         return await Task.FromResult(View(model));
     }

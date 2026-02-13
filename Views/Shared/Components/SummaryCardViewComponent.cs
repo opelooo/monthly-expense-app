@@ -13,9 +13,15 @@ public class SummaryCardViewComponent : ViewComponent
         string value,
         string iconClass,
         string iconBgClass = "bg-primary bg-opacity-10",
-        string? subtitle = null
+        string? subtitle = null,
+        bool isLoading = false
     )
     {
+        if (isLoading)
+        {
+            return View("_Skeleton");
+        }
+
         var model = new SummaryCardViewModel
         {
             Title = title,

@@ -12,9 +12,15 @@ public class DataCardViewComponent : ViewComponent
         string title,
         string iconClass,
         IEnumerable<dynamic> items,
-        string emptyMessage = "No data available"
+        string emptyMessage = "No data available",
+        bool isLoading = false
     )
     {
+        if (isLoading)
+        {
+            return View("_Skeleton");
+        }
+
         var model = new DataCardViewModel
         {
             Title = title,
