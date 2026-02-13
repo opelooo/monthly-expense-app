@@ -19,7 +19,7 @@ public class HomeController : Controller
         _userExpenseRepository = userExpenseRepository;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         if (HttpContext.Session.GetString("UserId") == null)
             return RedirectToAction("Index", "Authentication");
