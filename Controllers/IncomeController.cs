@@ -100,8 +100,8 @@ public class IncomeController : Controller
             IncomeType = incomeType,
             GrossAmount = parsedGrossAmount,
             ReceivedDate = receivedDate,
-            TaxWithheld = parsedTaxWithheld,
-            IsTaxable = isTaxable ?? true,
+            TaxWithheld = isTaxable == true ? parsedTaxWithheld : 0,
+            IsTaxable = isTaxable == true,
             CreatedAt = DateTime.UtcNow,
         };
 
@@ -195,9 +195,8 @@ public class IncomeController : Controller
         income.IncomeType = incomeType;
         income.GrossAmount = parsedGrossAmount;
         income.ReceivedDate = receivedDate;
-        income.TaxWithheld = parsedTaxWithheld;
-        // Checkbox submits true when checked, null when unchecked
-        income.IsTaxable = isTaxable ?? false;
+        income.TaxWithheld = isTaxable == true ? parsedTaxWithheld : 0;
+        income.IsTaxable = isTaxable == true;
 
         // Preserve the original CreatedAt with UTC kind
         if (income.CreatedAt.Kind == DateTimeKind.Unspecified)
