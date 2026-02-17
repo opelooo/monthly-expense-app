@@ -111,3 +111,60 @@ function confirmDelete(btn) {
         }
     });
 }
+
+// Confirm Delete Income Function
+function confirmDeleteIncome(btn) {
+    Swal.fire({
+        title: 'Hapus Income?',
+        text: 'Anda yakin ingin menghapus income ini?',
+        icon: 'warning',
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        ...getSwalOptions()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            btn.form.submit();
+        }
+    });
+}
+
+// Event Delegation for data-action attributes
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle toggle theme button
+    document.querySelector('[data-action="toggle-theme"]')?.addEventListener('click', function() {
+        toggleTheme();
+    });
+    
+    // Handle confirm logout button
+    document.querySelector('[data-action="confirm-logout"]')?.addEventListener('click', function() {
+        confirmLogout();
+    });
+    
+    // Handle confirm delete buttons (for Expenses)
+    document.querySelectorAll('[data-action="confirm-delete"]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            // Check if it's inside a form in the Income section or Expense section
+            const form = btn.closest('form');
+            const isIncomeForm = form?.action?.includes('/Income/Delete');
+            
+            if (isIncomeForm) {
+                confirmDeleteIncome(btn);
+            } else {
+                confirmDelete(btn);
+            }
+        });
+    });
+    
+    // Handle page size select
+    const pageSizeSelect = document.getElementById('pageSizeSelect');
+    if (pageSizeSelect) {
+        pageSizeSelect.addEventListener('change', function() {
+            const pageSize = this.value;
+            const currentUrl = window.location.pathname;
+            window.location.href = `${currentUrl}?page=1&pageSize=${pageSize}`;
+        });
+    }
+});

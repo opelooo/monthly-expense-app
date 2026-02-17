@@ -83,9 +83,9 @@ else
                                     <a href="/Income/Edit/@income.Id" class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil me-1"></i>Edit
                                     </a>
-                                    <form method="post" action="/Income/Delete" style="display:inline;">
+                                    <form method="post" action="/Income/Delete" class="inline-form">
                                         <input type="hidden" name="id" value="@income.Id">
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+                                        <button type="button" class="btn btn-sm btn-danger" data-action="confirm-delete">
                                             <i class="bi bi-trash me-1"></i>Hapus
                                         </button>
                                     </form>
