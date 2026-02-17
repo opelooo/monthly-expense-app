@@ -6,7 +6,7 @@
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="me-2 text-muted">Items per page:</label>
-                    <select id="pageSizeSelect" class="form-select form-select-sm page-size-select">
+                    <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
                         @foreach (int size in Model.PageSizes)
                         {
                             if (Model.PageSize == size)
@@ -29,3 +29,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('pageSizeSelect').addEventListener('change', function () {
+        const pageSize = this.value;
+        const currentUrl = window.location.pathname;
+        window.location.href = `${currentUrl}?page=1&pageSize=${pageSize}`;
+    });
+</script>
