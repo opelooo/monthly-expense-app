@@ -14,6 +14,11 @@
                         <small class="opacity-90">Sign in to your account</small>
                     </div>
                     <div class="card-body p-4">
+                        @if (TempData["SweetAlertScript"] != null)
+                        {
+                            @Html.Raw(TempData["SweetAlertScript"])
+                        }
+
                         <form method="post" asp-controller="Authentication" asp-action="Index" autocomplete="off">
                             @Html.AntiForgeryToken() 
 
