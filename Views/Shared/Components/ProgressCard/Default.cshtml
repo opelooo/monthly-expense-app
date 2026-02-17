@@ -11,13 +11,13 @@
                 @foreach (var method in Model.PercentItems.OrderByDescending(x => x.Value))
                 {
                     var percentage = method.Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    <div class="mb-3">
+                    <div class="mb-3" style="--progress-@method.Key: @percentage%;">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted">@method.Key</span>
                             <span class="fw-semibold">@Model.Items[method.Key].ToString("C")</span>
                         </div>
-                        <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-primary" style="width: @percentage%;"></div>
+                        <div class="progress progress-thin">
+                            <div class="progress-bar bg-primary" style="width: var(--progress-@method.Key);"></div>
                         </div>
                         <small class="text-muted">@method.Value.ToString("F1")%</small>
                     </div>
