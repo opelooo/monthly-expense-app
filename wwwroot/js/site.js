@@ -4,63 +4,54 @@
 // Write your JavaScript code.
 
 // Theme Toggle Functionality
-(function() {
-    // Default to dark mode
+(function () {
+
+    const root = document.documentElement;
+    let themeIcon = null;
+
     const defaultTheme = 'dark';
-    
-    // Get saved theme or use default
+
     function getSavedTheme() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            return savedTheme;
-        }
-        // Check system preference if no saved theme
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        const saved = localStorage.getItem('theme');
+        if (saved) return saved;
+
+        if (window.matchMedia?.('(prefers-color-scheme: dark)').matches)
             return 'dark';
-        }
+
         return defaultTheme;
     }
-    
-    // Apply theme to document
+
     function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
+
+        root.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
-        
-        // Update icon
-        const icon = document.getElementById('theme-icon');
-        if (icon) {
-            if (theme === 'dark') {
-                icon.classList.remove('bi-sun-fill');
-                icon.classList.add('bi-moon-fill');
-            } else {
-                icon.classList.remove('bi-moon-fill');
-                icon.classList.add('bi-sun-fill');
-            }
-        }
+
+        if (!themeIcon) return;
+
+        themeIcon.classList.toggle('bi-moon-fill', theme === 'dark');
+        themeIcon.classList.toggle('bi-sun-fill', theme !== 'dark');
     }
-    
-    // Toggle theme
+
     function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
+        applyTheme(
+            root.getAttribute('data-theme') === 'dark'
+                ? 'light'
+                : 'dark'
+        );
     }
-    
-    // Initialize theme on page load
+
     function initTheme() {
-        const theme = getSavedTheme();
-        applyTheme(theme);
+        themeIcon = document.getElementById('theme-icon');
+        applyTheme(getSavedTheme());
     }
-    
-    // Make toggleTheme available globally
+
     window.toggleTheme = toggleTheme;
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
+
+    if (document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', initTheme);
-    } else {
+    else
         initTheme();
-    }
+
 })();
 
 // Helper function to get SweetAlert dark mode options
@@ -93,30 +84,10 @@ function confirmLogout() {
     });
 }
 
-// Confirm Delete Function (for Expense deletion)
-function confirmDelete(btn) {
+function confirmDeleteGeneric(btn, type) {
     Swal.fire({
-        title: 'Hapus Expense?',
-        text: 'Anda yakin ingin menghapus expense ini?',
-        icon: 'warning',
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        ...getSwalOptions()
-    }).then((result) => {
-        if (result.isConfirmed) {
-            btn.form.submit();
-        }
-    });
-}
-
-// Confirm Delete Income Function
-function confirmDeleteIncome(btn) {
-    Swal.fire({
-        title: 'Hapus Income?',
-        text: 'Anda yakin ingin menghapus income ini?',
+        title: `Hapus ${type}?`,
+        text: `Anda yakin ingin menghapus ${type.toLowerCase()} ini?`,
         icon: 'warning',
         confirmButtonText: 'Ya, Hapus',
         cancelButtonText: 'Batal',
@@ -132,36 +103,33 @@ function confirmDeleteIncome(btn) {
 }
 
 // Event Delegation for data-action attributes
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle toggle theme button
-    document.querySelector('[data-action="toggle-theme"]')?.addEventListener('click', function() {
-        toggleTheme();
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.addEventListener('click', function (e) {
+        const toggleBtn = e.target.closest('[data-action="toggle-theme"]');
+        if (toggleBtn) return toggleTheme();
+
+        const logoutBtn = e.target.closest('[data-action="confirm-logout"]');
+        if (logoutBtn) return confirmLogout();
+
+        const deleteBtn = e.target.closest('[data-action="confirm-delete"]');
+        if (deleteBtn) {
+            const form = deleteBtn.closest('form');
+
+            const type =
+                form?.action?.includes('/Income/Delete')
+                    ? 'Income'
+                    : 'Expense';
+
+            confirmDeleteGeneric(deleteBtn, type);
+        }
     });
-    
-    // Handle confirm logout button
-    document.querySelector('[data-action="confirm-logout"]')?.addEventListener('click', function() {
-        confirmLogout();
-    });
-    
-    // Handle confirm delete buttons (for Expenses)
-    document.querySelectorAll('[data-action="confirm-delete"]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            // Check if it's inside a form in the Income section or Expense section
-            const form = btn.closest('form');
-            const isIncomeForm = form?.action?.includes('/Income/Delete');
-            
-            if (isIncomeForm) {
-                confirmDeleteIncome(btn);
-            } else {
-                confirmDelete(btn);
-            }
-        });
-    });
-    
+
+
     // Handle page size select
     const pageSizeSelect = document.getElementById('pageSizeSelect');
     if (pageSizeSelect) {
-        pageSizeSelect.addEventListener('change', function() {
+        pageSizeSelect.addEventListener('change', function () {
             const pageSize = this.value;
             const currentUrl = window.location.pathname;
             window.location.href = `${currentUrl}?page=1&pageSize=${pageSize}`;

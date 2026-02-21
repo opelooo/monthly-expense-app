@@ -92,8 +92,14 @@ body {
   color: var(--text-secondary) !important;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow:
+    0 0 0 0.1rem white,
+    0 0 0 0.25rem #258cfb;
 }
 
 html {
@@ -101,12 +107,14 @@ html {
   min-height: 100%;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
 
@@ -224,7 +232,6 @@ html {
 
 [data-theme="dark"] .table-hover > tbody > tr:hover > * {
   background-color: var(--bg-primary);
-  
 }
 
 /* Dropdown dark mode */
@@ -322,11 +329,11 @@ html {
 }
 
 /* Headings in dark mode */
-[data-theme="dark"] h1, 
-[data-theme="dark"] h2, 
-[data-theme="dark"] h3, 
-[data-theme="dark"] h4, 
-[data-theme="dark"] h5, 
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
 [data-theme="dark"] h6 {
   color: var(--text-primary);
 }
@@ -388,12 +395,7 @@ html {
 }
 
 [data-theme="dark"] .skeleton {
-  background: linear-gradient(
-    90deg,
-    #3d4248 25%,
-    #495057 50%,
-    #3d4248 75%
-  );
+  background: linear-gradient(90deg, #3d4248 25%, #495057 50%, #3d4248 75%);
   background-size: 200% 100%;
 }
 
